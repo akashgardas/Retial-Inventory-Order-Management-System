@@ -1,13 +1,15 @@
 import argparse
 import json
 from src.services.product_service import ProductService
-import src.services as order_service
+from src.services.order_service import OrderService
 from src.dao.product_dao import ProductDAO
 import src.dao as customer_dao
  
 class CLI:
     def __init__(self):
         self.product_service = ProductService()
+        self.product_dao = ProductDAO()
+        self.order_service = OrderService()
         
     def cmd_product_add(self, args):
         try:
@@ -18,7 +20,7 @@ class CLI:
             print("Error:", e)
     
     def cmd_product_list(self, args):
-        ps = ProductDAO.list_products(limit=100)
+        ps = self.product_dao.list_products(limit=100)
         print(json.dumps(ps, indent=2, default=str))
     
     def cmd_customer_add(self, args):
@@ -40,7 +42,7 @@ class CLI:
                 print("Invalid item format:", item)
                 return
         try:
-            ord = order_service.create_order(args.customer, items)
+            ord = self.order_service.create_order(args.customer, items)
             print("Order created:")
             print(json.dumps(ord, indent=2, default=str))
         except Exception as e:
@@ -48,14 +50,14 @@ class CLI:
     
     def cmd_order_show(self, args):
         try:
-            o = order_service.get_order_details(args.order)
+            o = self.order_service.get_order_details(args.order)
             print(json.dumps(o, indent=2, default=str))
         except Exception as e:
             print("Error:", e)
     
     def cmd_order_cancel(self, args):
         try:
-            o = order_service.cancel_order(args.order)
+            o = self.order_service.cancel_order(args.order)
             print("Order cancelled (updated):")
             print(json.dumps(o, indent=2, default=str))
         except Exception as e:

@@ -9,7 +9,14 @@ class ProductDAO:
         """
         Insert a product and return the inserted row (two-step: insert then select by unique sku).
         """
-        payload = {"name": name, "sku": sku, "price": price, "stock": stock}
+        
+        payload = {
+            "name": name, 
+            "sku": sku, 
+            "price": price, 
+            "stock": stock
+            }
+        
         if category is not None:
             payload["category"] = category
     
@@ -18,10 +25,12 @@ class ProductDAO:
     
         # Fetch inserted row by unique column (sku)
         resp = self._sb().table("retial_products").select("*").eq("sku", sku).limit(1).execute()
+        
         return resp.data[0] if resp.data else None
  
     def get_product_by_id(self, prod_id: int) -> Optional[Dict]:
         resp = self._sb().table("retial_products").select("*").eq("prod_id", prod_id).limit(1).execute()
+        
         return resp.data[0] if resp.data else None
     
     def get_product_by_sku(self, sku: str) -> Optional[Dict]:
@@ -32,8 +41,11 @@ class ProductDAO:
         """
         Update and then return the updated row (two-step).
         """
+        
         self._sb().table("retial_products").update(fields).eq("prod_id", prod_id).execute()
+        
         resp = self._sb().table("retial_products").select("*").eq("prod_id", prod_id).limit(1).execute()
+        
         return resp.data[0] if resp.data else None
  
     def delete_product(self, prod_id: int) -> Optional[Dict]:
