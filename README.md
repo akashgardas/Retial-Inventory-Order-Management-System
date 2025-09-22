@@ -43,7 +43,8 @@
     Allowed only if status = PLACED.
 	Restore product stock.
     Update order status = CANCELLED.
-5. Mark an order as Completed after payment is successful
+
+5. Mark an order as COMPLETED after payment is successful (payment service)
 
 ---
 
@@ -55,8 +56,7 @@
 1. When an order is created, insert a pending payment record with the total amount.
 
 2. Process payment → mark payment as PAID with method (Cash/Card/UPI).
-
-3. Update the order status to COMPLETED.
+    Update the order status to COMPLETED.
 
 4. Support refunds: If an order is cancelled, mark the payment as REFUNDED.
 
